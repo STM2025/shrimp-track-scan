@@ -1,12 +1,28 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { useState } from "react";
+import { QRScanner } from "@/components/QRScanner";
+import { ProductTraceability } from "@/components/ProductTraceability";
 
 const Index = () => {
+  const [currentView, setCurrentView] = useState<"scanner" | "traceability">("scanner");
+  const [productId, setProductId] = useState<string | null>(null);
+
+  const handleScan = (scannedProductId: string) => {
+    setProductId(scannedProductId);
+    setCurrentView("traceability");
+  };
+
+  const handleBack = () => {
+    setCurrentView("scanner");
+    setProductId(null);
+  };
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
-      </div>
+    <div className="min-h-screen">
+      {currentView === "scanner" ? (
+        <QRScanner onScan={handleScan} />
+      ) : (
+        <ProductTraceability onBack={handleBack} />
+      )}
     </div>
   );
 };
