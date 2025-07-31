@@ -106,6 +106,46 @@ export function QRScanner({ onScan }: QRScannerProps) {
           </CardContent>
         </Card>
 
+        {/* Demo Options */}
+        <div className="space-y-4 mb-6">
+          <h2 className="text-lg font-semibold">Try these sample QR codes:</h2>
+          <div className="grid grid-cols-1 gap-3">
+            <Button
+              variant="outline"
+              onClick={() => onScan("SHRIMP-ECU-2024-001")}
+              className="p-4 h-auto"
+            >
+              <div className="text-center">
+                <div className="text-2xl mb-1">🦐</div>
+                <div className="font-semibold">Supply Chain View</div>
+                <div className="text-xs text-muted-foreground">Detailed traceability</div>
+              </div>
+            </Button>
+            <Button
+              variant="outline"
+              onClick={() => onScan("CUSTOMER-SHRIMP-2024-001")}
+              className="p-4 h-auto"
+            >
+              <div className="text-center">
+                <div className="text-2xl mb-1">👥</div>
+                <div className="font-semibold">Customer View</div>
+                <div className="text-xs text-muted-foreground">B2C Experience</div>
+              </div>
+            </Button>
+            <Button
+              variant="outline"
+              onClick={() => onScan("ADMIN-PANEL-2024-001")}
+              className="p-4 h-auto"
+            >
+              <div className="text-center">
+                <div className="text-2xl mb-1">⚙️</div>
+                <div className="font-semibold">Admin Panel</div>
+                <div className="text-xs text-muted-foreground">Configure layouts</div>
+              </div>
+            </Button>
+          </div>
+        </div>
+
         {/* Features */}
         <div className="grid grid-cols-2 gap-4">
           <Card className="p-4 text-center">
