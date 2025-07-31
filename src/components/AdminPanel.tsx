@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { 
@@ -12,13 +11,16 @@ import {
   Upload, 
   Eye, 
   Settings, 
-  Image as ImageIcon,
-  FileText,
   Save,
   Plus,
-  Trash2
+  Trash2,
+  Fish,
+  Factory,
+  Truck,
+  Store
 } from "lucide-react";
-import { B2CCustomerView } from "./B2CCustomerView";
+import { UnifiedProductView } from "./UnifiedProductView";
+import { LayoutType, ProductData, SupplyChainStep } from "@/types/layout";
 import shrimp1 from "@/assets/shrimp-1.jpg";
 import shrimp2 from "@/assets/shrimp-2.jpg";
 import shrimp3 from "@/assets/shrimp-3.jpg";
@@ -28,8 +30,8 @@ interface AdminPanelProps {
 }
 
 export function AdminPanel({ onBack }: AdminPanelProps) {
-  const [selectedLayout, setSelectedLayout] = useState<"card" | "hero" | "minimal">("card");
-  const [productData, setProductData] = useState({
+  const [selectedLayout, setSelectedLayout] = useState<LayoutType>("comprehensive");
+  const [productData, setProductData] = useState<ProductData>({
     image: shrimp1,
     name: "Premium White Shrimp",
     productId: "SHRIMP-ECU-2024-001",
@@ -75,10 +77,94 @@ export function AdminPanel({ onBack }: AdminPanelProps) {
     document: ""
   });
 
+  const supplyChainData: SupplyChainStep[] = [
+    {
+      step: "Farm",
+      location: "Guayas Province, Ecuador",
+      company: "AquaMar Sustainable Farms",
+      date: "2024-01-15",
+      status: "completed",
+      icon: Fish,
+      description: "Responsible aquaculture with ASC certification",
+      carbonFootprint: "0.8 kg CO₂",
+      blockchainTxId: "0x1a2b3c4d5e6f7890abcdef1234567890abcdef12",
+      tests: [
+        { name: "Larvae Health Check", result: "Passed", date: "2024-01-10" },
+        { name: "Genetic Screening", result: "SPF Certified", date: "2024-01-12" }
+      ],
+      certifications: [
+        { name: "SPF Larvae Certificate", issuer: "GOAL Standards", id: "SPF-2024-001" }
+      ]
+    },
+    {
+      step: "Processing",
+      location: "Guayaquil, Ecuador", 
+      company: "EcoProcess Solutions",
+      date: "2024-01-20",
+      status: "completed",
+      icon: Factory,
+      description: "IFS certified processing facility",
+      carbonFootprint: "0.6 kg CO₂",
+      blockchainTxId: "0x2b3c4d5e6f7890abcdef1234567890abcdef1234",
+      tests: [
+        { name: "Microbiological Analysis", result: "Passed", date: "2024-01-20" }
+      ],
+      certifications: [
+        { name: "HACCP Certificate", issuer: "SGS", id: "HACCP-EP-2024" }
+      ]
+    },
+    {
+      step: "Distribution",
+      location: "Miami, FL, USA",
+      company: "FreshMarine Logistics",
+      date: "2024-01-22",
+      status: "completed", 
+      icon: Truck,
+      description: "Cold chain maintained at -18°C",
+      carbonFootprint: "0.5 kg CO₂",
+      blockchainTxId: "0x3c4d5e6f7890abcdef1234567890abcdef123456",
+      tests: [
+        { name: "Temperature Monitoring", result: "Maintained", date: "2024-01-22" }
+      ],
+      certifications: [
+        { name: "GDP Certificate", issuer: "FDA", id: "GDP-US-2024" }
+      ]
+    },
+    {
+      step: "Retail",
+      location: "Whole Foods Market",
+      company: "Austin, TX, USA",
+      date: "2024-01-25",
+      status: "current",
+      icon: Store,
+      description: "Final point of sale",
+      carbonFootprint: "0.2 kg CO₂",
+      blockchainTxId: "0x4d5e6f7890abcdef1234567890abcdef12345678",
+      tests: [
+        { name: "Final Quality Check", result: "Passed", date: "2024-01-25" }
+      ],
+      certifications: [
+        { name: "Retail Food Safety", issuer: "Whole Foods", id: "RFS-WF-2024" }
+      ]
+    }
+  ];
+
   const layoutOptions = [
-    { value: "card", label: "Card Layout", description: "Clean card-based design" },
-    { value: "hero", label: "Hero Layout", description: "Full-width hero image" },
-    { value: "minimal", label: "Minimal Layout", description: "Simple, focused design" }
+    { 
+      value: "comprehensive" as LayoutType, 
+      label: "Comprehensive Layout", 
+      description: "Full detailed view with product info, certifications, and complete supply chain journey in timeline format" 
+    },
+    { 
+      value: "executive" as LayoutType, 
+      label: "Executive Layout", 
+      description: "Business-focused layout with hero image, sidebar certifications, and supply chain cards" 
+    },
+    { 
+      value: "consumer" as LayoutType, 
+      label: "Consumer Layout", 
+      description: "Simple mobile-friendly design with accordion supply chain and minimal information" 
+    }
   ];
 
   const imageOptions = [
@@ -153,7 +239,7 @@ export function AdminPanel({ onBack }: AdminPanelProps) {
                             ? 'border-ocean bg-ocean/5' 
                             : 'border-border hover:bg-muted/50'
                         }`}
-                        onClick={() => setSelectedLayout(option.value as any)}
+                        onClick={() => setSelectedLayout(option.value)}
                       >
                         <div className="flex items-center justify-between">
                           <div>
@@ -338,10 +424,11 @@ export function AdminPanel({ onBack }: AdminPanelProps) {
                     <DialogTitle>Customer View Preview</DialogTitle>
                   </DialogHeader>
                   <div className="max-h-96 overflow-auto">
-                    <div className="scale-75 origin-top-left">
-                      <B2CCustomerView
+                    <div className="scale-50 origin-top-left w-[200%] h-96 overflow-hidden">
+                      <UnifiedProductView
                         layout={selectedLayout}
                         productData={productData}
+                        supplyChainData={supplyChainData}
                         onBack={() => {}}
                       />
                     </div>
@@ -363,9 +450,10 @@ export function AdminPanel({ onBack }: AdminPanelProps) {
               <CardContent>
                 <div className="border rounded-lg overflow-hidden">
                   <div className="scale-50 origin-top-left w-[200%] h-96 overflow-hidden">
-                    <B2CCustomerView
+                    <UnifiedProductView
                       layout={selectedLayout}
                       productData={productData}
+                      supplyChainData={supplyChainData}
                       onBack={() => {}}
                     />
                   </div>
