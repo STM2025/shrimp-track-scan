@@ -39,7 +39,16 @@ export function ProductTraceability({ onBack }: ProductTraceabilityProps) {
       icon: Fish,
       description: "Responsible aquaculture with ASC certification",
       carbonFootprint: "0.8 kg CO₂",
-      blockchainTxId: "0x1a2b3c4d5e6f7890abcdef1234567890abcdef12"
+      blockchainTxId: "0x1a2b3c4d5e6f7890abcdef1234567890abcdef12",
+      tests: [
+        { name: "Larvae Health Check", result: "Passed", date: "2024-01-10" },
+        { name: "Genetic Screening", result: "SPF Certified", date: "2024-01-12" },
+        { name: "Pathogen Testing", result: "Negative", date: "2024-01-14" }
+      ],
+      certifications: [
+        { name: "SPF Larvae Certificate", issuer: "GOAL Standards", id: "SPF-2024-001" },
+        { name: "Biosecurity Protocol", issuer: "ASC", id: "BSP-ECU-2024" }
+      ]
     },
     {
       step: "Processing",
@@ -50,7 +59,16 @@ export function ProductTraceability({ onBack }: ProductTraceabilityProps) {
       icon: Factory,
       description: "IFS certified processing facility",
       carbonFootprint: "0.6 kg CO₂",
-      blockchainTxId: "0x2b3c4d5e6f7890abcdef1234567890abcdef1234"
+      blockchainTxId: "0x2b3c4d5e6f7890abcdef1234567890abcdef1234",
+      tests: [
+        { name: "Microbiological Analysis", result: "Passed", date: "2024-01-20" },
+        { name: "Heavy Metals Test", result: "Below Limits", date: "2024-01-20" },
+        { name: "Antibiotic Residue", result: "Not Detected", date: "2024-01-20" }
+      ],
+      certifications: [
+        { name: "HACCP Certificate", issuer: "SGS", id: "HACCP-EP-2024" },
+        { name: "IFS Food Standard", issuer: "IFS", id: "IFS-001-2024" }
+      ]
     },
     {
       step: "Distribution",
@@ -61,7 +79,16 @@ export function ProductTraceability({ onBack }: ProductTraceabilityProps) {
       icon: Truck,
       description: "Cold chain maintained at -18°C",
       carbonFootprint: "0.5 kg CO₂",
-      blockchainTxId: "0x3c4d5e6f7890abcdef1234567890abcdef123456"
+      blockchainTxId: "0x3c4d5e6f7890abcdef1234567890abcdef123456",
+      tests: [
+        { name: "Temperature Monitoring", result: "Maintained", date: "2024-01-22" },
+        { name: "Package Integrity", result: "Intact", date: "2024-01-22" },
+        { name: "Cold Chain Verification", result: "Compliant", date: "2024-01-22" }
+      ],
+      certifications: [
+        { name: "GDP Certificate", issuer: "FDA", id: "GDP-US-2024" },
+        { name: "Cold Chain Compliance", issuer: "ISTA", id: "CC-001-2024" }
+      ]
     },
     {
       step: "Retail",
@@ -72,7 +99,16 @@ export function ProductTraceability({ onBack }: ProductTraceabilityProps) {
       icon: Store,
       description: "Final point of sale",
       carbonFootprint: "0.2 kg CO₂",
-      blockchainTxId: "0x4d5e6f7890abcdef1234567890abcdef12345678"
+      blockchainTxId: "0x4d5e6f7890abcdef1234567890abcdef12345678",
+      tests: [
+        { name: "Final Quality Check", result: "Passed", date: "2024-01-25" },
+        { name: "Storage Temperature", result: "Optimal", date: "2024-01-25" },
+        { name: "Expiry Date Verification", result: "Valid", date: "2024-01-25" }
+      ],
+      certifications: [
+        { name: "Retail Food Safety", issuer: "Whole Foods", id: "RFS-WF-2024" },
+        { name: "Organic Handling", issuer: "USDA", id: "OH-TX-2024" }
+      ]
     }
   ];
 
@@ -195,6 +231,43 @@ export function ProductTraceability({ onBack }: ProductTraceabilityProps) {
                           </div>
                         </div>
                       </div>
+                      
+                      {/* Tests and Certifications */}
+                      {step.tests && (
+                        <div className="mt-4 p-4 rounded-lg bg-gradient-to-r from-sustainable/5 to-ocean/5 border border-sustainable/20">
+                          <h4 className="font-semibold text-sm mb-3 text-sustainable">Quality Tests & Provenance</h4>
+                          <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
+                            {step.tests.map((test, testIndex) => (
+                              <div key={testIndex} className="flex items-center justify-between p-2 rounded bg-background/50">
+                                <div>
+                                  <p className="text-xs font-medium">{test.name}</p>
+                                  <p className="text-xs text-muted-foreground">{test.date}</p>
+                                </div>
+                                <Badge variant="secondary" className="text-xs bg-sustainable/10 text-sustainable">
+                                  {test.result}
+                                </Badge>
+                              </div>
+                            ))}
+                          </div>
+                          
+                          {step.certifications && (
+                            <div className="mt-3">
+                              <h5 className="font-medium text-xs mb-2 text-ocean">Certifications</h5>
+                              <div className="space-y-1">
+                                {step.certifications.map((cert, certIndex) => (
+                                  <div key={certIndex} className="flex items-center justify-between text-xs p-2 rounded bg-ocean/5">
+                                    <div>
+                                      <p className="font-medium">{cert.name}</p>
+                                      <p className="text-muted-foreground">Issued by: {cert.issuer}</p>
+                                    </div>
+                                    <p className="font-mono text-ocean">{cert.id}</p>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      )}
                     </div>
                   </div>
                   
