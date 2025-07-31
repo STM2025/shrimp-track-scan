@@ -37,7 +37,9 @@ export function ProductTraceability({ onBack }: ProductTraceabilityProps) {
       date: "2024-01-15",
       status: "completed",
       icon: Fish,
-      description: "Responsible aquaculture with ASC certification"
+      description: "Responsible aquaculture with ASC certification",
+      carbonFootprint: "0.8 kg CO₂",
+      blockchainTxId: "0x1a2b3c4d5e6f7890abcdef1234567890abcdef12"
     },
     {
       step: "Processing",
@@ -46,7 +48,9 @@ export function ProductTraceability({ onBack }: ProductTraceabilityProps) {
       date: "2024-01-20",
       status: "completed",
       icon: Factory,
-      description: "IFS certified processing facility"
+      description: "IFS certified processing facility",
+      carbonFootprint: "0.6 kg CO₂",
+      blockchainTxId: "0x2b3c4d5e6f7890abcdef1234567890abcdef1234"
     },
     {
       step: "Distribution",
@@ -55,7 +59,9 @@ export function ProductTraceability({ onBack }: ProductTraceabilityProps) {
       date: "2024-01-22",
       status: "completed", 
       icon: Truck,
-      description: "Cold chain maintained at -18°C"
+      description: "Cold chain maintained at -18°C",
+      carbonFootprint: "0.5 kg CO₂",
+      blockchainTxId: "0x3c4d5e6f7890abcdef1234567890abcdef123456"
     },
     {
       step: "Retail",
@@ -64,7 +70,9 @@ export function ProductTraceability({ onBack }: ProductTraceabilityProps) {
       date: "2024-01-25",
       status: "current",
       icon: Store,
-      description: "Final point of sale"
+      description: "Final point of sale",
+      carbonFootprint: "0.2 kg CO₂",
+      blockchainTxId: "0x4d5e6f7890abcdef1234567890abcdef12345678"
     }
   ];
 
@@ -150,28 +158,55 @@ export function ProductTraceability({ onBack }: ProductTraceabilityProps) {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="space-y-4">
+            <div className="relative">
               {supplyChainSteps.map((step, index) => (
-                <div key={index} className="flex items-center space-x-4 p-4 rounded-lg border">
-                  <div className={`w-12 h-12 rounded-full flex items-center justify-center ${
-                    step.status === 'completed' ? 'bg-sustainable text-white' : 
-                    step.status === 'current' ? 'bg-ocean text-white' : 'bg-muted'
-                  }`}>
-                    <step.icon className="w-6 h-6" />
-                  </div>
-                  
-                  <div className="flex-1">
-                    <div className="flex items-center justify-between">
-                      <h3 className="font-semibold">{step.step}</h3>
-                      {step.status === 'completed' && <CheckCircle className="w-5 h-5 text-sustainable" />}
+                <div key={index} className="relative">
+                  <div className="flex items-start space-x-4 p-6 rounded-lg border bg-gradient-to-r from-muted/50 to-background shadow-sm">
+                    <div className={`w-14 h-14 rounded-full flex items-center justify-center shadow-md ${
+                      step.status === 'completed' ? 'bg-sustainable text-white' : 
+                      step.status === 'current' ? 'bg-ocean text-white animate-pulse' : 'bg-muted'
+                    }`}>
+                      <step.icon className="w-7 h-7" />
                     </div>
-                    <p className="text-sm text-muted-foreground mb-1">{step.company}</p>
-                    <p className="text-sm text-muted-foreground">{step.location} • {step.date}</p>
-                    <p className="text-sm mt-1">{step.description}</p>
+                    
+                    <div className="flex-1">
+                      <div className="flex items-center justify-between mb-2">
+                        <h3 className="font-bold text-lg">{step.step}</h3>
+                        {step.status === 'completed' && <CheckCircle className="w-6 h-6 text-sustainable" />}
+                        {step.status === 'current' && <div className="w-3 h-3 bg-ocean rounded-full animate-pulse" />}
+                      </div>
+                      <p className="font-semibold text-foreground mb-1">{step.company}</p>
+                      <p className="text-sm text-muted-foreground mb-2">{step.location} • {step.date}</p>
+                      <p className="text-sm mb-3">{step.description}</p>
+                      
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-3">
+                        <div className="flex items-center space-x-2 p-3 rounded-md bg-muted/50">
+                          <Leaf className="w-4 h-4 text-sustainable" />
+                          <div>
+                            <p className="text-xs text-muted-foreground">Carbon Footprint</p>
+                            <p className="font-semibold text-sm">{step.carbonFootprint}</p>
+                          </div>
+                        </div>
+                        <div className="flex items-center space-x-2 p-3 rounded-md bg-muted/50">
+                          <div className="w-4 h-4 bg-gradient-to-r from-ocean to-sustainable rounded-sm" />
+                          <div>
+                            <p className="text-xs text-muted-foreground">Blockchain Tx</p>
+                            <p className="font-mono text-xs font-semibold text-ocean truncate">{step.blockchainTxId}</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                   
+                  {/* Movement Arrow */}
                   {index < supplyChainSteps.length - 1 && (
-                    <ChevronRight className="w-5 h-5 text-muted-foreground" />
+                    <div className="flex justify-center my-2">
+                      <div className="flex items-center space-x-2 px-4 py-2 rounded-full bg-gradient-to-r from-ocean/10 to-sustainable/10 border border-ocean/20">
+                        <div className={`w-2 h-2 rounded-full ${step.status === 'completed' ? 'bg-sustainable' : 'bg-muted-foreground'}`} />
+                        <ChevronRight className={`w-4 h-4 ${step.status === 'completed' ? 'text-sustainable' : 'text-muted-foreground'}`} />
+                        <div className={`w-2 h-2 rounded-full ${step.status === 'completed' ? 'bg-sustainable' : 'bg-muted-foreground'}`} />
+                      </div>
+                    </div>
                   )}
                 </div>
               ))}
